@@ -25,6 +25,7 @@ main {
     max-height: 100vh;
 
     #cherry_tree_svg {
+        visibility: hidden;
         z-index: -1;
         width: auto;
         height: 125%;
@@ -91,16 +92,12 @@ main {
     z-index: 3;
     background-color: rgb(109, 109, 236);
     transform: translate(0px, 0px);
-    /* animation: moveX 3s cubic-bezier(0.165, 0.84, 0.44, 1) infinite alternate; */
+    /* animation: rotate 3s cubic-bezier(0.165, 0.84, 0.44, 1) infinite alternate; */
 }
 
-@keyframes moveX {
-    from {transform: translate(0px, 0px)}
-    to {transform: translate(400px, 0px);}
-}
-
-.flower-test-half {
-    transform: translate(200px, 100px);
+@keyframes rotate {
+    from {transform: rotate(0deg)}
+    to {transform: rotate(360deg);}
 }
 
 .flower-1{
@@ -108,5 +105,6 @@ main {
 }
 
 .flower-2 {
-    transform: translate(400px, 400px);
+    transform: rotate(0deg) translate(400px, 400px);
+    /* animation: rotate 3s cubic-bezier(0.165, 0.84, 0.44, 1) infinite alternate; */
 }
