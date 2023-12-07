@@ -17,66 +17,96 @@ main {
     display: grid;
     grid-template-columns: 1fr 15% 1fr;
     min-height: 100vh;
-    overflow: hidden;
+    overflow: hidden; 
+}
 
-    .cherry_tree {
-        grid-column: 1 / 3;
+.cherry_tree {
+    grid-column: 1 / 3;
+    max-height: 100vh;
+
+    #cherry_tree_svg {
         z-index: -1;
-        max-height: 100vh;
+        width: auto;
+        height: 125%;
+        transform: translate(-20%, -5%);
+    }
+}
 
-        #cherry_tree_svg {
-            width: auto;
-            height: 125%;
-            transform: translate(-20%, -5%);
-        }
+.haiku_generator {
+    font-family: 'Crimson Text', 'Times New Roman', Times, serif;
+    font-size: 1.25em;
+    max-width: 500px;
+    min-height: 300px;
+    align-self: center;
+    display: flex;
+    flex-flow: column wrap;
+    justify-content: space-between;
+    padding: 1em;
+    margin: 1em;
+    background-color: rgba(255, 255, 255, 0.57);
+    border-radius: 20px;
+
+    h1 {
+        font-size: 3em;
+        margin-bottom: 0.25em;
     }
 
-    .haiku_generator {
-        font-family: 'Crimson Text', 'Times New Roman', Times, serif;
-        font-size: 1.25em;
-        max-width: 500px;
-        min-height: 300px;
-        align-self: center;
-        display: flex;
-        flex-flow: column wrap;
-        justify-content: space-between;
-        padding: 1em;
-        margin: 1em;
-        background-color: rgba(255, 255, 255, 0.57);
-        border-radius: 20px;
-
-        h1 {
-            font-size: 3em;
-            margin-bottom: 0.25em;
-        }
-
-        h2 {
-            animation: typing 3s steps(3, start), 
-                blinking 0.5s cubic-bezier(1, 0, 0, 1.01) infinite alternate;
-            border-right: 3px solid black;
-            font-family: 'Roboto Mono', 'Courier New', Courier, monospace;
-            overflow: hidden;
-            width: 2em;
-            margin-bottom: 1em;
-        }
-
-        .haiku_button {
-            font-family: 'Roboto Mono', 'Courier New', Courier, monospace;
-            font-size: 1.05em;
-            background-color: #F0C3CF;
-            border: 1.5px solid black;
-            padding: 0.5em;
-            border-radius: 10px;
-        }
-
-        .haiku_button:hover {
-            background-color: #f8a3ba;
-            cursor: pointer;
-        }
-
-        .haiku_button:active {
-            background-color: #e27794;
-            cursor: pointer;
-        }
+    h2 {
+        animation: typing 3s steps(3, start), 
+            blinking 0.5s cubic-bezier(1, 0, 0, 1.01) infinite alternate;
+        border-right: 3px solid black;
+        font-family: 'Roboto Mono', 'Courier New', Courier, monospace;
+        overflow: hidden;
+        width: 2em;
+        margin-bottom: 1em;
     }
+
+    .haiku_button {
+        font-family: 'Roboto Mono', 'Courier New', Courier, monospace;
+        font-size: 1.05em;
+        background-color: #F0C3CF;
+        border: 1.5px solid black;
+        padding: 0.5em;
+        border-radius: 10px;
+    }
+
+    .haiku_button:hover {
+        background-color: #f8a3ba;
+        cursor: pointer;
+    }
+
+    .haiku_button:active {
+        background-color: #e27794;
+        cursor: pointer;
+    }
+}
+
+.dark-flower {
+    height: auto;
+    width: 50px;
+    position: absolute;
+}
+
+.flower-test {
+    z-index: 3;
+    background-color: rgb(109, 109, 236);
+    transform: translate(0px, 0px);
+    /* animation: moveX 3s cubic-bezier(0.165, 0.84, 0.44, 1) infinite alternate; */
+}
+
+@keyframes moveX {
+    from {transform: translate(0px, 0px)}
+    to {transform: translate(400px, 0px);}
+}
+
+.flower-test-half {
+    transform: translate(200px, 100px);
+}
+
+.flower-1{
+    transform: translate(0px, 0px);
+}
+
+.flower-2 {
+    transform: translate(400px, 400px);
 }
