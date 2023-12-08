@@ -30,10 +30,10 @@ function cubicBezierPath(xPoints, yPoints, f) {
 
 // Animates single petal falling on the screen, randomizes path and rotation
 // Based on: https://javascript.info/js-animation#structured-animation
-function animate(imgId, duration) {
+function animateFalling(imgId, duration) {
     let start = performance.now();
 
-    // Frame timing
+    // Path timing, a random 4 point bezier curve
     const [f1, f2, f3, f4] = [0, Math.random().toFixed(2), Math.random().toFixed(2), 1];
 
     // Coordinates for bezier path, goes point 1 -> point 4
@@ -55,8 +55,8 @@ function animate(imgId, duration) {
             ((time - start) / duration) < 0 ? 0 : ((time - start) / duration);
         // timeLine needs to go from 0 to 1
 
-        let frame = cubicBezier(f1, f2, f3, f4, timeLine); // frame timing
-        let { pointX, pointY } = cubicBezierPath(xPoints, yPoints, frame); // frame position
+        let timing = cubicBezier(f1, f2, f3, f4, timeLine); // frame timing
+        let { pointX, pointY } = cubicBezierPath(xPoints, yPoints, timing); // frame position
 
         let rotate = (cubicBezier(r1, r2, r3, r4, timeLine)) * 360; // Next rotation degree
 
@@ -124,14 +124,14 @@ function petalsAndFlowersAnimation() {
     for (const imgId of petalIds) {
         const timeOut = Math.floor(Math.random() * (5000 - 2500) + 2500);
         const duration = Math.floor(Math.random() * (5000 - 2500) + 2500);
-        setTimeout(animate(imgId, duration), timeOut);
+        setTimeout(animateFalling(imgId, duration), timeOut);
     }
 
-    const flowerIds = generateFlowers(Math.floor(Math.random() * 100));
+    const flowerIds = generateFlowers(Math.floor(Math.random() * 1000));
     for (const imgId of flowerIds) {
         const timeOut = Math.floor(Math.random() * (5000 - 2500) + 2500);
         const duration = Math.floor(Math.random() * (5000 - 2500) + 2500);
-        setTimeout(animate(imgId, duration), timeOut);
+        setTimeout(animateFalling(imgId, duration), timeOut);
     }
 
     setTimeout(() => {// Remove petals and flowers
@@ -149,4 +149,4 @@ function autoAnimatePetalsAndFlowers() {
     setInterval(petalsAndFlowersAnimation, 3500);
 }
 
-autoAnimatePetalsAndFlowers();
+//autoAnimatePetalsAndFlowers();

@@ -16,31 +16,59 @@ function generateHaiku(haiku) {
 
 function printHaiku(line1, line2, line3) {
     const haikuContainer = document.querySelector(".haiku_container");
-    const haiku = `<p class="haiku"><span>${line1}</span><br><span>${line2}</span><br><span>${line3}</span></p>`;
-    haikuContainer.style.flex = "1";
+    const haiku = `<p class="haiku">
+            <span id="haiku-line-1">${""}</span>
+            <br>
+            <span id="haiku-line-2">${""}</span>
+            <br>
+            <span id="haiku-line-3">${""}</span>
+        </p>`;
+
+    haikuContainer.style.flex = "1";   
     haikuContainer.innerHTML = haiku;
 
-    
+    animate(animateLine(line1, "#haiku-line-1"));
 }
 
-// id determines what to animate
-// animation path determines where the object will go
-// animation timing determines where to render the object
-// duration
-function animate(id, path, timing, render, duration) {
+function animateLine(line, lineId) {
+    
+    const animationSettings = {
+        id: lineId,
+        duration: line.length * 1000, // One second per character
+        timing(currentTime) { // Linear timing
+            return currentTime;
+        },
+        path(frame) {
+            const line = this;
+            const nextIndex = Math.floor(frame * 10); // Based on the current frame, return an index number
+            return line[nextIndex];
+        },
+        render(id, letter) { // The next character in the line
+            const line = document.querySelector(lineId);
+            line.insertAdjacentHTML("afterbegin", letter);
+        }
+    }
+    return animationSettings;
+}
+
+// Id determines what to animate
+// Animation path determines where the object will go
+// Animation timing determines where to render the object
+// duration is how many milliseconds is the animation
+function animate({duration, timing, path, render}) {
     let start = performance.now();
 
     requestAnimationFrame(function animate(time) {
-        // timeLine needs to go from 0 to 1
+        // currentTime needs to go from 0 to 1
         let currentTime = ((time - start) / duration) > 1 ? 1 :
             ((time - start) / duration) < 0 ? 0 : ((time - start) / duration);
 
         // Based on the timing determine the objects state
         const currentState = path(timing(currentTime));
 
-        render(id, currentState); // Render object
+        render(currentState); // Render object
 
-        (timeLine < 1) ? requestAnimationFrame(animate) : ""; // Go to next frame
+        (currentTime < 1) ? requestAnimationFrame(animate) : ""; // Go to next frame
     });
 }
 
