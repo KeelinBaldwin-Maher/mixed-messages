@@ -9,7 +9,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Crimson+Text&family=Roboto+Mono&display=swap" rel="stylesheet">
-    <script defer src="main.js"></script>
+    <script defer src="bkgAnimation.js"></script>
+    <script defer src="haiku.js"></script>
 </head>
 
 <body>
@@ -353,10 +354,10 @@
         </div>
         <div class="haiku_generator">
             <h1 class="title">Haiku Generator</h1>
-            <section class="haiku">
-                <h2 class="elipses">...</h2>
+            <section class="haiku_container">
+                <h2 class="ellipses">...</h2>
             </section>
-            <button class="haiku_button">
+            <button class="haiku_button" onclick="generateHaiku()">
                 Generate a Haiku
             </button>
         </div>

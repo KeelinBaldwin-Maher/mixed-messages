@@ -38,12 +38,13 @@ function animate(imgId, duration) {
 
     // Coordinates for bezier path, goes point 1 -> point 4
     // values are for pixels    
-    const xPoints = [(Math.random() * (window.innerWidth / 2)),
+    const xPoints = [(Math.random() * (window.innerWidth * 0.45)).toFixed(2),
     (Math.random() * window.innerWidth).toFixed(2),
     (Math.random() * window.innerWidth).toFixed(2),
-    (Math.random() * (window.innerWidth - (window.innerWidth / 3)) + (window.innerWidth / 3)).toFixed(2)]; // Path will not end in the first third of the screen
+    (Math.random() * (window.innerWidth - (window.innerWidth * 0.3)) + (window.innerWidth * 0.3)).toFixed(2)]; // Path will not end in the first third of the screen
 
-    const yPoints = [-45, (Math.random() * window.innerHeight).toFixed(2),
+    const yPoints = [(Math.random() * -45).toFixed(2), 
+    (Math.random() * window.innerHeight).toFixed(2),
     (Math.random() * window.innerHeight).toFixed(2), window.innerHeight];
 
     // Rotation timing
@@ -57,11 +58,11 @@ function animate(imgId, duration) {
         let frame = cubicBezier(f1, f2, f3, f4, timeLine); // frame timing
         let { pointX, pointY } = cubicBezierPath(xPoints, yPoints, frame); // frame position
 
-        let rotate = (cubicBezier(r1, r2, r3, r4, timeLine)) * 360;
+        let rotate = (cubicBezier(r1, r2, r3, r4, timeLine)) * 360; // Next rotation degree
 
-        flowerMotion(imgId, pointX, pointY, rotate);
+        flowerMotion(imgId, pointX, pointY, rotate); // Render frame
 
-        (timeLine < 1) ? requestAnimationFrame(animate) : console.log(``); // Go to next frame
+        (timeLine < 1) ? requestAnimationFrame(animate) : ""; // Go to next frame
     });
 }
 
@@ -74,15 +75,15 @@ function flowerMotion(imgId, x, y, r) {
 // Creates an array of flower elements with lengths 4 - 10 and randomized images.
 // Places the images on the screen
 // Returns an array of flower ids
-function generateFlowers() {
+function generateFlowers(groupNum) {
     const flowers = new Array(Math.floor(Math.random() * (11 - 4) + 4)); // Array length between 4 and 10
     const flowerSrc = [`./SVG/flowerDark.svg`, `./SVG/flowerMed.svg`, `./SVG/flowerLight.svg`];
 
     const flowerIds = new Array(flowers.length);
 
     for (let i = 0; i < flowers.length; i++) {
-        flowerIds[i] = `flower${i}`;
-        flowers[i] = `<img id="flower${i}" class="flower"` +
+        flowerIds[i] = `flower${i}${groupNum}`;
+        flowers[i] = `<img id="${flowerIds[i]}" class="flower"` +
             `style="z-index: ${Math.floor(Math.random() * 10)}"` +
             `src="${flowerSrc[Math.floor(Math.random() * flowerSrc.length)]}"></img>`;
     }
@@ -97,14 +98,14 @@ function generateFlowers() {
 // Creates an array of petal img elements with lengths 4 - 10 and randomized images.
 // Places the images on the screen
 // Returns array of petal ids
-function generatePetals() {
+function generatePetals(groupNum) {
     const petals = new Array(Math.floor(Math.random() * (11 - 4) + 4)); // Array length between 4 and 10
     const petalSrc = [`./SVG/petalDark.svg`, `./SVG/petalMed.svg`, `./SVG/petalLight.svg`];
 
     const petalIds = new Array(petals.length);
 
     for (let i = 0; i < petals.length; i++) {
-        petalIds[i] = `petal${i}`;
+        petalIds[i] = `petal${i}${groupNum}`;
         petals[i] = `<img id="${petalIds[i]}" class="petal"` +
             `style="z-index: ${Math.floor(Math.random() * 10)}"` +
             `src="${petalSrc[Math.floor(Math.random() * petalSrc.length)]}"></img>`;
@@ -117,32 +118,35 @@ function generatePetals() {
     return petalIds;
 }
 
+// Fully animate petals and flowers
 function petalsAndFlowersAnimation() {
-    const petalIds = generatePetals(); // Array of petal img ids
+    const petalIds = generatePetals(Math.floor(Math.random() * 1000)); // Array of petal img ids
     for (const imgId of petalIds) {
-        const timeOut = Math.floor(Math.random() * (5000 - 1000) + 1000);
-        const duration = Math.floor(Math.random() * (5000 - 1000) + 1000);
+        const timeOut = Math.floor(Math.random() * (5000 - 2500) + 2500);
+        const duration = Math.floor(Math.random() * (5000 - 2500) + 2500);
         setTimeout(animate(imgId, duration), timeOut);
     }
 
-    const flowerIds = generateFlowers();
+    const flowerIds = generateFlowers(Math.floor(Math.random() * 100));
     for (const imgId of flowerIds) {
-        const timeOut = Math.floor(Math.random() * (5000 - 1000) + 1000);
-        const duration = Math.floor(Math.random() * (5000 - 1000) + 1000);
+        const timeOut = Math.floor(Math.random() * (5000 - 2500) + 2500);
+        const duration = Math.floor(Math.random() * (5000 - 2500) + 2500);
         setTimeout(animate(imgId, duration), timeOut);
     }
 
     setTimeout(() => {// Remove petals and flowers
         for (const imgId of petalIds) {
-            console.log(document.querySelector(`#${imgId}`).style.zIndex);
             document.querySelector(`#${imgId}`).remove();
         }
         for (const imgId of flowerIds) {
-            console.log(document.querySelector(`#${imgId}`).style.zIndex);
             document.querySelector(`#${imgId}`).remove();
         }
     }, 6000);
 }
 
+function autoAnimatePetalsAndFlowers() {
+    petalsAndFlowersAnimation();
+    setInterval(petalsAndFlowersAnimation, 3500);
+}
 
-
+autoAnimatePetalsAndFlowers();
