@@ -85,6 +85,11 @@ main {
     animation: opacity 0.5s ease-in;
 }
 
+.haiku span {
+    width: fit-content;
+    padding-right: 0.15em;
+}
+
 .haiku_button {
     font-family: 'Roboto Mono', 'Courier New', Courier, monospace;
     font-size: 1.05em;

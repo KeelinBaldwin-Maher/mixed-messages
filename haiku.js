@@ -1,6 +1,4 @@
 function generateHaiku(haiku) {
-    console.log(haiku);
-    
     const syllables = [1, 2, 3, 4]; // Determines how many syllables a word will have
 
     const line1Syllables = createLine(syllables, 5); // 5
@@ -15,58 +13,90 @@ function generateHaiku(haiku) {
 }
 
 function printHaiku(line1, line2, line3) {
-    const haikuContainer = document.querySelector(".haiku_container");
+    const id1 = "haiku-line-1";
+    const id2 = "haiku-line-2";
+    const id3 = "haiku-line-3";
     const haiku = `<p class="haiku">
-            <span id="haiku-line-1">${""}</span>
+            <span id="${id1}"></span>
             <br>
-            <span id="haiku-line-2">${""}</span>
+            <span id="${id2}"></span>
             <br>
-            <span id="haiku-line-3">${""}</span>
+            <span id="${id3}"></span>
         </p>`;
 
-    haikuContainer.style.flex = "1";   
+    const haikuContainer = document.querySelector(".haiku_container");
+    haikuContainer.style.flex = "1";
     haikuContainer.innerHTML = haiku;
 
-    animate(animateLine(line1, "#haiku-line-1"));
+    const haikuAnimationSettings = {
+        ids: [id1, id2, id3],
+        lines: [line1, line2, line3],
+        duration: (line1.length + line2.length + line3.length) * 100,
+        timing(currentTime) {
+            return currentTime;
+        },
+        path(frame) { // id1 -> id2
+            const section = Math.floor(frame * 100);
+            if (section <= 30) {
+                return { id: this.ids[0], line: this.lines[0] };
+            } else if (section >= 31 && section <= 60) { 
+                return { id: this.ids[1], line: this.lines[1] }; 
+            } else { 
+                return { id: this.ids[2], line: this.lines[2] }; 
+            }
+        },
+        render(currentState) {
+            //console.log(currentState.line);
+            animate(animateLine(currentState.line, ("#" + currentState.id)));
+        }
+    }
+    animate(haikuAnimationSettings);
 }
 
 function animateLine(line, lineId) {
-    
+
     const animationSettings = {
         id: lineId,
-        duration: line.length * 1000, // One second per character
+        line: line,
+        duration: line.length * 100,
         timing(currentTime) { // Linear timing
             return currentTime;
         },
         path(frame) {
-            const line = this;
-            const nextIndex = Math.floor(frame * 10); // Based on the current frame, return an index number
-            return line[nextIndex];
+            const index = Math.floor(frame * line.length); // Based on the current frame, return an index number
+            const newLine = this.line.substring(0, index); // The path is the full index
+            return newLine;
         },
-        render(id, letter) { // The next character in the line
-            const line = document.querySelector(lineId);
-            line.insertAdjacentHTML("afterbegin", letter);
+        render(currentState) { // The next character in the line
+            const line = document.querySelector(this.id);
+            if (currentState === this.line) {
+                line.style.animation = "";
+            } else {
+                line.style.animation = "blinking 0.5s cubic-bezier(1, 0, 0, 1.01) infinite alternate";
+            }
+
+            line.innerText = currentState;
         }
     }
     return animationSettings;
 }
 
-// Id determines what to animate
 // Animation path determines where the object will go
 // Animation timing determines where to render the object
 // duration is how many milliseconds is the animation
-function animate({duration, timing, path, render}) {
+// returns true when animation is complete
+function animate(settings) {
     let start = performance.now();
 
     requestAnimationFrame(function animate(time) {
         // currentTime needs to go from 0 to 1
-        let currentTime = ((time - start) / duration) > 1 ? 1 :
-            ((time - start) / duration) < 0 ? 0 : ((time - start) / duration);
+        let currentTime = ((time - start) / settings.duration) > 1 ? 1 :
+            ((time - start) / settings.duration) < 0 ? 0 : ((time - start) / settings.duration);
 
         // Based on the timing determine the objects state
-        const currentState = path(timing(currentTime));
+        const currentState = settings.path(settings.timing(currentTime));
 
-        render(currentState); // Render object
+        settings.render(currentState); // Render object
 
         (currentTime < 1) ? requestAnimationFrame(animate) : ""; // Go to next frame
     });
@@ -75,12 +105,12 @@ function animate({duration, timing, path, render}) {
 function addWords(syllableAmts) {
     let words = getWordList(syllableAmts[0]); // Retrieves a list of words that have that specific amount of syllables
     let randomWord = words[Math.floor(Math.random() * words.length)];
-    let line = randomWord; 
+    let line = randomWord;
 
     for (let i = 1; i < syllableAmts.length; i++) {
         words = getWordList(syllableAmts[i]);
         randomWord = words[Math.floor(Math.random() * words.length)];
-        
+
         while (line.includes(randomWord)) { // If the word already exists in the line get a new word
             randomWord = words[Math.floor(Math.random() * words.length)];
         }
