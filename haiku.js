@@ -28,37 +28,21 @@ function printHaiku(line1, line2, line3) {
     haikuContainer.style.flex = "1";
     haikuContainer.innerHTML = haiku;
 
-    const haikuAnimationSettings = {
-        ids: [id1, id2, id3],
-        lines: [line1, line2, line3],
-        duration: (line1.length + line2.length + line3.length) * 100,
-        timing(currentTime) {
-            return currentTime;
-        },
-        path(frame) { // id1 -> id2
-            const section = Math.floor(frame * 100);
-            if (section <= 30) {
-                return { id: this.ids[0], line: this.lines[0] };
-            } else if (section >= 31 && section <= 60) { 
-                return { id: this.ids[1], line: this.lines[1] }; 
-            } else { 
-                return { id: this.ids[2], line: this.lines[2] }; 
-            }
-        },
-        render(currentState) {
-            //console.log(currentState.line);
-            animate(animateLine(currentState.line, ("#" + currentState.id)));
-        }
-    }
-    animate(haikuAnimationSettings);
+    const duration1 = line1.length * 150;
+    const duration2 = line2.length * 150;
+    const duration3 = line3.length * 150;
+
+    animate(animateLine(line1, `#${id1}`, duration1));
+    setTimeout(() => {animate(animateLine(line2, `#${id2}`, duration2));}, duration1);
+    setTimeout(() => {animate(animateLine(line3, `#${id3}`, duration3));}, duration1 + duration2);
 }
 
-function animateLine(line, lineId) {
+function animateLine(line, lineId, duration) {
 
     const animationSettings = {
         id: lineId,
         line: line,
-        duration: line.length * 100,
+        duration: duration,
         timing(currentTime) { // Linear timing
             return currentTime;
         },

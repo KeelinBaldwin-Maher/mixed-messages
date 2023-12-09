@@ -149,4 +149,4 @@ function autoAnimatePetalsAndFlowers() {
     setInterval(petalsAndFlowersAnimation, 3500);
 }
 
-//autoAnimatePetalsAndFlowers();
+autoAnimatePetalsAndFlowers();
