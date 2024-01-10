@@ -34,18 +34,21 @@ function animateFalling(imgId, duration) {
     let start = performance.now();
 
     // Path timing, a random 4 point bezier curve
-    const [f1, f2, f3, f4] = [0, Math.random().toFixed(2), Math.random().toFixed(2), 1];
+    const [f1, f2, f3, f4] = [0, 
+        (Math.random() * 0.5).toFixed(2), 
+        (Math.random() * (0.9 - 0.5) + 0.5).toFixed(2), 
+        1];
 
     // Coordinates for bezier path, goes point 1 -> point 4
     // values are for pixels    
-    const xPoints = [(Math.random() * (window.innerWidth * 0.45)).toFixed(2),
+    const xPoints = [(Math.random() * (window.innerWidth * 0.4)).toFixed(2),
     (Math.random() * window.innerWidth).toFixed(2),
     (Math.random() * window.innerWidth).toFixed(2),
-    (Math.random() * (window.innerWidth - (window.innerWidth * 0.3)) + (window.innerWidth * 0.3)).toFixed(2)]; // Path will not end in the first third of the screen
-
+    (Math.random() * (window.innerWidth - (window.innerWidth * 0.2)) + (window.innerWidth * 0.2)).toFixed(2)];
     const yPoints = [(Math.random() * -45).toFixed(2), 
-    (Math.random() * window.innerHeight).toFixed(2),
-    (Math.random() * window.innerHeight).toFixed(2), window.innerHeight];
+    (Math.random() * (window.innerHeight * 0.5)).toFixed(2),
+    (Math.random() * (window.innerHeight - (window.innerHeight * 0.5)) + (window.innerHeight * 0.5)).toFixed(2), 
+    window.innerHeight];
 
     // Rotation timing
     const [r1, r2, r3, r4] = [0, Math.random().toFixed(2), Math.random().toFixed(2), 1];
@@ -99,7 +102,7 @@ function generateFlowers(groupNum) {
 // Places the images on the screen
 // Returns array of petal ids
 function generatePetals(groupNum) {
-    const petals = new Array(Math.floor(Math.random() * (11 - 4) + 4)); // Array length between 4 and 10
+    const petals = new Array(Math.floor(Math.random() * (16 - 5) + 5)); // Array length between 4 and 10
     const petalSrc = [`./SVG/petalDark.svg`, `./SVG/petalMed.svg`, `./SVG/petalLight.svg`];
 
     const petalIds = new Array(petals.length);
@@ -146,7 +149,7 @@ function petalsAndFlowersAnimation() {
 
 function autoAnimatePetalsAndFlowers() {
     petalsAndFlowersAnimation();
-    setInterval(petalsAndFlowersAnimation, 3500);
+    setInterval(petalsAndFlowersAnimation, 2000);
 }
 
 autoAnimatePetalsAndFlowers();
