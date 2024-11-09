@@ -1,0 +1,18 @@
+function animate(aniObj1) {
+    let start;
+    const duration = aniObj1.duration// Duration in milliseconds
+
+    window.requestAnimationFrame((timeStamp) => {
+        start = timeStamp;
+        innerAnimate(timeStamp);
+    })
+
+    function innerAnimate(timeStamp) {
+        let frame = ((timeStamp - start) / duration); // frame values: 0 - 1
+        if (frame > 1) frame = 1; // 1 = completed
+
+        aniObj1.render(frame, aniObj1.rotationTiming, aniObj1.pathTiming, aniObj1.path, aniObj1.htmlObj);
+
+        if (frame < 1) window.requestAnimationFrame((timeStamp) => innerAnimate(timeStamp)); // Go to next frame
+    }
+}
